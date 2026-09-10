@@ -1,0 +1,25 @@
+# PolyForm Noncommercial License 1.0.0
+
+This repository's **original software code** is licensed under the
+**PolyForm Noncommercial License 1.0.0**.
+
+Full license terms:
+https://polyformproject.org/licenses/noncommercial/1.0.0
+
+SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
+
+Required Notice: Copyright © 2026 agangsm. Original project code is provided for noncommercial purposes only.
+
+## Scope of this license
+
+This license applies only to original source code and original project materials for which the repository owner has the right to grant a license. It permits noncommercial use, study, modification, and redistribution subject to the PolyForm Noncommercial License 1.0.0.
+
+## Excluded third-party material
+
+This license does **not** grant any rights in third-party material, including without limitation the Turing Machine board game name, trademarks, logos, artwork, graphic design, official rulebooks, translated or adapted rulebook imagery, official challenge-bank content, or other material owned by Le Scorpion Masqué or other rights holders.
+
+See `THIRD_PARTY_NOTICES.md` for details.
+
+## No affiliation
+
+This is an unofficial fan-made study/localization project. It is not affiliated with, endorsed by, sponsored by, or authorized by Le Scorpion Masqué.
