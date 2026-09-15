@@ -4,17 +4,24 @@ An offline single-player web implementation of *Turing Machine*, featuring Chine
 
 ## Features
 
-- Fixed challenge bank and randomly generated puzzles
+- Fixed challenge bank and locally generated random puzzles
 - Turing Master daily challenges, free practice, and challenge reports
+- Play history for previously played fixed puzzles, random puzzles, and Master Challenges
+- Four history categories: Beginner, Standard, Hard, and Master Challenge
+- Random-puzzle history preserves the original generated puzzle for reopening
+- Local history data export / import via JSON
 - Deduction notes, scratchpad tools, and read-only puzzle-by-puzzle review
 - Standard card quick reference
+- Unified Info menu with History, Rules, and Standard Cards
+- Active visual state for the Change Puzzle button while the puzzle library is expanded
+- Mobile layout optimizations for the header, puzzle controls, and title area
 - Chinese rule pages and the English rulebook
 - Chinese / English interface switching
 - Local save data and single-file offline operation
 
 ## Direct Use
 
-Open `release/Turing_Machine_单人离线版.html` directly. This file already contains the runtime code, styles, challenge data, and rule materials, so no internet connection or software installation is required.
+Open `Turing_Machine_v1.2.0.html` directly. This file already contains the runtime code, styles, challenge data, and rule materials, so no internet connection or software installation is required.
 
 ## Local Development
 
@@ -31,13 +38,27 @@ Build the single-file offline edition:
 npm run build:standalone
 ```
 
-By default, the build script outputs the finished file to the parent directory of the project as `Turing_Machine_单人离线版_clean.html`.
+By default, the build script outputs the finished file to the parent directory of the project as `Turing_Machine_v1.2.0.html`.
 
 Verify the fixed challenge bank, randomly generated puzzles, and Turing Master challenge sets:
 
 ```bash
 npm run audit:puzzles
 ```
+
+## Interface Notes
+
+The top-right **Info** menu contains:
+
+- History
+- Rules
+- Standard Cards
+
+The History view separates records into Beginner, Standard, Hard, and Master Challenge. History is stored locally, supports JSON export / import, and can reopen previously generated random puzzles using the preserved puzzle data.
+
+The **Change Puzzle** button uses an active green state while the puzzle library is expanded and returns to its default style when the library is collapsed.
+
+On mobile layouts, all header actions remain visible; the title and explanatory text are intentionally capped to avoid consuming excessive screen space when zoomed.
 
 ## Directory Structure
 
@@ -71,17 +92,24 @@ Accordingly, this project is more accurately described as **source-available / n
 
 ## 功能
 
-- 固定题库与随机生成题目
+- 固定题库与本地随机生成题目
 - 图灵大师每日挑战、自由练习与挑战战报
+- 历史记录覆盖已游玩的默认题库、随机题和大师挑战
+- 历史记录分为：入门、标准、困难、大师挑战
+- 随机题历史会保留原题数据，可重新打开同一道题
+- 历史记录支持 JSON 数据导出与导入
 - 推理记录、推理草稿和只读逐题复盘
 - 标准卡速查
+- “说明”菜单统一整合：历史记录、规则介绍、标准卡速查
+- “换一题”在题库展开时显示激活状态，收起后恢复默认状态
+- 手机端优化抬头按钮、题库操作区和标题说明区域，确保关键按钮完整显示
 - 中文规则页与英文规则书
 - 中文 / English 界面切换
 - 本地存档与单文件离线运行
 
 ## 直接使用
 
-打开 `release/Turing_Machine_单人离线版.html` 即可。该文件已经内嵌运行代码、样式、题库及规则资料，不需要联网，也不需要安装软件。
+打开 `Turing_Machine_v1.2.0.html` 即可。该文件已经内嵌运行代码、样式、题库及规则资料，不需要联网，也不需要安装软件。
 
 ## 本地开发
 
@@ -98,13 +126,27 @@ npm run dev
 npm run build:standalone
 ```
 
-构建脚本默认把成品输出到项目目录的上一级，文件名为 `Turing_Machine_单人离线版_clean.html`。
+构建脚本默认把成品输出到项目目录的上一级，文件名为 `Turing_Machine_v1.2.0.html`。
 
 核验固定题库、随机题和图灵大师题组：
 
 ```bash
 npm run audit:puzzles
 ```
+
+## 界面说明
+
+右上角“说明”菜单包含：
+
+- 历史记录
+- 规则介绍
+- 标准卡速查
+
+历史记录按照“入门 / 标准 / 困难 / 大师挑战”分类，数据保存在本地，并支持 JSON 导出与导入。随机生成题会保存足够的数据，以便以后重新打开原来的同一道题。
+
+顶部“换一题”按钮在题库展开时显示为绿底白字，题库收起后恢复默认样式。
+
+手机端会优先保证抬头中的所有操作按钮完整显示，同时限制标题与说明文字的字号和占用空间，避免页面放大后影响主要操作区域。
 
 ## 目录说明
 

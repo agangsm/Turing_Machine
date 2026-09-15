@@ -30,7 +30,7 @@ At the time this notice was prepared, the package includes files such as:
 - `app/data/rulebook-en-pdf.ts` (an embedded/Base64 form of the English rulebook);
 - `app/data/rule-slides.ts` (generated rule-page images/data);
 - `app/data/challenge-bank.json`;
-- `release/Turing_Machine_单人离线版.html` (a bundled offline build that may embed some of the above).
+- `release/Turing_Machine_v1.2.0.html` (a bundled offline build that may embed some of the above).
 
 These files are **excluded from the PolyForm Noncommercial License grant unless the repository owner separately owns the relevant rights**. Their presence is for the maintainer's personal study/localization workflow and does not create or imply redistribution permission from the original rights holders.
 

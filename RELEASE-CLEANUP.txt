@@ -2,7 +2,8 @@ Turing Machine 单人离线版｜发布前清理报告
 日期：2026-09-10
 
 一、交付文件
-- 清理后成品：Turing_Machine_单人离线版_clean.html
+- 当前正式成品（v1.2.0 命名）：release/Turing_Machine_v1.2.0.html
+- 本节以下为 2026-09-10 清理轮次的记录，当时成品文件名为：Turing_Machine_单人离线版_clean.html
 - 清理前备份：Turing_Machine_单人离线版_clean_清理前备份.html
 - 未生成 ZIP（按用户要求保留单文件 HTML，由用户自行压缩）。
 

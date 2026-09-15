@@ -4,7 +4,7 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 
 const projectDir = process.cwd();
-const outputPath = resolve(projectDir, '..', 'Turing_Machine_单人离线版_clean.html');
+const outputPath = resolve(projectDir, '..', 'Turing_Machine_v1.2.0.html');
 const tempDir = resolve(projectDir, '.standalone-dist');
 await build({ configFile: false, root: projectDir, plugins: [react()], build: { outDir: tempDir, emptyOutDir: true, assetsInlineLimit: Number.MAX_SAFE_INTEGER, target: ['chrome90', 'edge90', 'firefox88', 'safari14'], rollupOptions: { input: resolve(projectDir, 'standalone-source.html'), output: { inlineDynamicImports: true } } } });
 const assetFiles = await readdir(resolve(tempDir, 'assets'));
