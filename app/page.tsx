@@ -19,6 +19,8 @@ type MasterTab = 'analysis' | 'questions';
 type ReviewSession = { source: 'master'; index: number };
 type PuzzleSource = 'bank' | 'random' | 'master';
 type HistoryTab = DifficultyLevel | 'master';
+// 验证器数量：4 / 5 / 6，或 'random'（同一难度下随机出 4–6 个验证器的题）。
+type VerifierCount = number | 'random';
 // 一条历史记录 = 玩过的一道题（默认题库 / 随机生成题 / 大师挑战）。
 // game 保存完整题目快照，hash 保留原题号（题库题号、随机题分享码）；大师挑战另存挑战编号。
 type PuzzleHistoryEntry = {
@@ -75,6 +77,8 @@ const normalizeMasterRun = (run: MasterRun): MasterRun => ({ ...run, questions: 
 const usesLegacyArrangementEstimate = (question: MasterRun['questions'][number]) => question.questions > 0 && !(question.history?.length);
 const arrangementCount = (question: MasterRun['questions'][number]) => question.history?.length || (question.questions > 0 ? question.guesses.length : 0);
 const puzzleSourceOf = (game: Game): PuzzleSource => game.hash.trim().startsWith('R') ? 'random' : 'bank';
+// 选“随机”时，每次出题在本机随机取 4–6 个验证器；难度始终沿用当前选择的难度。
+const resolveVerifierCount = (value: VerifierCount) => typeof value === 'number' ? value : 4 + Math.floor(Math.random() * 3);
 const historyEntryId = (source: PuzzleSource, hash: string, master?: { dateKey: string; mode: MasterRun['mode']; index: number }) => source === 'master' && master ? `master:${master.dateKey}:${master.mode}:${master.index}` : `${source}:${hash}`;
 const formatPlayedAt = (value: number) => { const date = new Date(value); const pad = (number: number) => String(number).padStart(2, '0'); return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`; };
 function normalizeHistoryEntry(value: unknown): PuzzleHistoryEntry | null {
@@ -137,7 +141,7 @@ export default function Home() {
   const [masterExpandedQuestion, setMasterExpandedQuestion] = useState<number | null>(null);
   const [reviewSession, setReviewSession] = useState<ReviewSession | null>(null);
   const [hashInput, setHashInput] = useState('');
-  const [verifierCount, setVerifierCount] = useState(4);
+  const [verifierCount, setVerifierCount] = useState<VerifierCount>(4);
   const [difficulty, setDifficulty] = useState(1);
   const [bankPage, setBankPage] = useState(1);
   const [message, setMessage] = useState<'' | 'incomplete-code' | 'not-found'>('');
@@ -299,7 +303,7 @@ export default function Home() {
     const cleanHash = hashInput.replace(/[^a-z0-9]/gi, '').toUpperCase();
     if (kind === 'hash' && cleanHash.length < 5) { setMessage('incomplete-code'); return; }
     setMessage('');
-    if (kind === 'random') { resetProgress(generateGame(verifierCount, difficulty, challengeBank)); setShowPicker(false); return; }
+    if (kind === 'random') { resetProgress(generateGame(resolveVerifierCount(verifierCount), difficulty, challengeBank)); setShowPicker(false); return; }
     const found = challengeBank.find((item) => item.hash.replace(/[^a-z0-9]/gi, '').toUpperCase() === cleanHash) ?? gameFromShareCode(cleanHash, challengeBank);
     if (!found) { setMessage('not-found'); return; }
     resetProgress(found); setHashInput(''); setShowPicker(false);
@@ -322,7 +326,8 @@ export default function Home() {
     resetProgress(found); setShowInfoHistory(false);
   };
   const playAnother = () => {
-    const nextVerifierCount = 4 + Math.floor(Math.random() * 3);
+    // 沿用题库页的验证器设置：固定档位就按该档出题，选“随机”则随机取 4–6 个；难度保持当前题目的难度。
+    const nextVerifierCount = resolveVerifierCount(verifierCount);
     resetProgress(generateGame(nextVerifierCount, difficultyOf(game), challengeBank));
     setShowPicker(false);
   };
@@ -377,10 +382,10 @@ export default function Home() {
   </main>;
 }
 
-function Picker({ locale, bankPage, setBankPage, games, difficulty, setDifficulty, verifierCount, setVerifierCount, hashInput, setHashInput, message, loadChallenge, selectGame }: { locale: Locale; bankPage: number; setBankPage: (n: number) => void; games: BankGame[]; difficulty: number; setDifficulty: (n: number) => void; verifierCount: number; setVerifierCount: (n: number) => void; hashInput: string; setHashInput: (value: string) => void; message: '' | 'incomplete-code' | 'not-found'; loadChallenge: (kind: 'hash' | 'random') => void; selectGame: (game: Game) => void }) {
+function Picker({ locale, bankPage, setBankPage, games, difficulty, setDifficulty, verifierCount, setVerifierCount, hashInput, setHashInput, message, loadChallenge, selectGame }: { locale: Locale; bankPage: number; setBankPage: (n: number) => void; games: BankGame[]; difficulty: number; setDifficulty: (n: number) => void; verifierCount: VerifierCount; setVerifierCount: (value: VerifierCount) => void; hashInput: string; setHashInput: (value: string) => void; message: '' | 'incomplete-code' | 'not-found'; loadChallenge: (kind: 'hash' | 'random') => void; selectGame: (game: Game) => void }) {
   const t = (text: string) => ui(locale, text);
   const messageText = message === 'incomplete-code' ? (locale === 'en' ? 'Enter the complete challenge code printed at the top of the card.' : '请输入题卡顶部的完整短代码。') : message === 'not-found' ? (locale === 'en' ? 'Puzzle not found. Enter a printable challenge code or a random share code such as R41 ABCD1234.' : '没有找到该题。可输入附件题代码，或随机题分享代码（例如 R41 ABCD1234）。') : '';
-  return <section className="picker-panel" aria-label={t('选择挑战')}><div className="picker-copy"><p className="eyebrow">{t('挑战入口')}</p><h2>{t('420 题附件合集，以及无限离线随机题')}</h2><p>{t('输入打印题卡或朋友分享的随机题短代码即可载入；随机题会在本机即时生成，并通过唯一解校验。')}</p></div><div className="picker-controls"><label className="hash-field"><span>{t('题目短代码')}</span><input value={hashInput} onChange={(event) => setHashInput(event.target.value)} placeholder={locale === 'en' ? 'e.g. A41 AA5 or R41 ABCD1234' : '例如 A41 AA5 或 R41 ABCD1234'} /></label><button className="secondary-button" onClick={() => loadChallenge('hash')}>{t('载入题目')}</button><div className="select-row"><label><span>{t('验证器')}</span><select value={verifierCount} onChange={(event) => setVerifierCount(Number(event.target.value))}><option value={4}>{locale === 'en' ? '4 Verifiers' : '4 个'}</option><option value={5}>{locale === 'en' ? '5 Verifiers' : '5 个'}</option><option value={6}>{locale === 'en' ? '6 Verifiers' : '6 个'}</option></select></label><label className={`difficulty-control ${difficultyClasses[difficulty as DifficultyLevel]}`}><span>{t('难度')} <i>{difficultyText(locale, difficulty)}</i></span><select value={difficulty} onChange={(event) => setDifficulty(Number(event.target.value))}><option value={0}>{difficultyText(locale, 0)}</option><option value={1}>{difficultyText(locale, 1)}</option><option value={2}>{difficultyText(locale, 2)}</option></select></label><button className="random-button" onClick={() => loadChallenge('random')}>{t('随机生成')}</button></div>{messageText && <p className="form-message">{messageText}</p>}</div><div className="bank-browser"><div className="bank-browser-head"><div><strong>{t('附件题库')}</strong><span>{t('16 页 · 共 420 题 · 可离线载入')}</span></div><span>{locale === 'en' ? `Page ${bankPage}` : `第 ${bankPage} 页`}</span></div><div className="page-tabs">{Array.from({ length: 16 }, (_, index) => index + 1).map((page) => <button className={page === bankPage ? 'active' : ''} key={page} onClick={() => setBankPage(page)}>{page}</button>)}</div><div className="bank-grid">{games.map((bankGame) => { const level = difficultyOf(bankGame); const meta = { className: difficultyClasses[level], label: difficultyText(locale, level) }; return <button className={`difficulty-card ${meta.className}`} key={`${bankGame.page}-${bankGame.position}`} onClick={() => selectGame(bankGame)}><i className="difficulty-corner">{meta.label}</i><span>{String(bankGame.position).padStart(2, '0')}</span><strong>{bankGame.hash}</strong><small>{locale === 'en' ? `${bankGame.n} Verifiers` : `${bankGame.n} 个验证器`}</small></button>; })}</div></div></section>;
+  return <section className="picker-panel" aria-label={t('选择挑战')}><div className="picker-copy"><p className="eyebrow">{t('挑战入口')}</p><h2>{t('420 题附件合集，以及无限离线随机题')}</h2><p>{t('输入打印题卡或朋友分享的随机题短代码即可载入；随机题会在本机即时生成，并通过唯一解校验。')}</p></div><div className="picker-controls"><label className="hash-field"><span>{t('题目短代码')}</span><input value={hashInput} onChange={(event) => setHashInput(event.target.value)} placeholder={locale === 'en' ? 'e.g. A41 AA5 or R41 ABCD1234' : '例如 A41 AA5 或 R41 ABCD1234'} /></label><button className="secondary-button" onClick={() => loadChallenge('hash')}>{t('载入题目')}</button><div className="select-row"><label><span>{t('验证器')}</span><select value={verifierCount} onChange={(event) => setVerifierCount(event.target.value === 'random' ? 'random' : Number(event.target.value))}><option value="random">{t('随机')}</option><option value={4}>{locale === 'en' ? '4 Verifiers' : '4 个'}</option><option value={5}>{locale === 'en' ? '5 Verifiers' : '5 个'}</option><option value={6}>{locale === 'en' ? '6 Verifiers' : '6 个'}</option></select></label><label className={`difficulty-control ${difficultyClasses[difficulty as DifficultyLevel]}`}><span>{t('难度')} <i>{difficultyText(locale, difficulty)}</i></span><select value={difficulty} onChange={(event) => setDifficulty(Number(event.target.value))}><option value={0}>{difficultyText(locale, 0)}</option><option value={1}>{difficultyText(locale, 1)}</option><option value={2}>{difficultyText(locale, 2)}</option></select></label><button className="random-button" onClick={() => loadChallenge('random')}>{t('随机生成')}</button></div>{messageText && <p className="form-message">{messageText}</p>}</div><div className="bank-browser"><div className="bank-browser-head"><div><strong>{t('附件题库')}</strong><span>{t('16 页 · 共 420 题 · 可离线载入')}</span></div><span>{locale === 'en' ? `Page ${bankPage}` : `第 ${bankPage} 页`}</span></div><div className="page-tabs">{Array.from({ length: 16 }, (_, index) => index + 1).map((page) => <button className={page === bankPage ? 'active' : ''} key={page} onClick={() => setBankPage(page)}>{page}</button>)}</div><div className="bank-grid">{games.map((bankGame) => { const level = difficultyOf(bankGame); const meta = { className: difficultyClasses[level], label: difficultyText(locale, level) }; return <button className={`difficulty-card ${meta.className}`} key={`${bankGame.page}-${bankGame.position}`} onClick={() => selectGame(bankGame)}><i className="difficulty-corner">{meta.label}</i><span>{String(bankGame.position).padStart(2, '0')}</span><strong>{bankGame.hash}</strong><small>{locale === 'en' ? `${bankGame.n} Verifiers` : `${bankGame.n} 个验证器`}</small></button>; })}</div></div></section>;
 }
 
 function LegalNotice({ locale }: { locale: Locale }) { return <footer className="site-footer"><span>{ui(locale, '此网页版汉化仅供学习交流 严禁用于任何商业途径')}</span><a href="https://www.scorpionmasque.com/en/turingmachine" target="_blank" rel="noreferrer">{ui(locale, 'Turing Machine 官网 ↗')}</a></footer>; }

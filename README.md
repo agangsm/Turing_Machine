@@ -5,6 +5,7 @@ An offline single-player web implementation of *Turing Machine*, featuring Chine
 ## Features
 
 - Fixed challenge bank and locally generated random puzzles
+- Verifier-count option **Random** (4–6 Verifiers), which pools every puzzle of the selected difficulty
 - Turing Master daily challenges, free practice, and challenge reports
 - Play history for previously played fixed puzzles, random puzzles, and Master Challenges
 - Four history categories: Beginner, Standard, Hard, and Master Challenge
@@ -21,7 +22,7 @@ An offline single-player web implementation of *Turing Machine*, featuring Chine
 
 ## Direct Use
 
-Open `Turing_Machine_v1.2.0.html` directly. This file already contains the runtime code, styles, challenge data, and rule materials, so no internet connection or software installation is required.
+Open `Turing_Machine_v1.2.1.html` directly. This file already contains the runtime code, styles, challenge data, and rule materials, so no internet connection or software installation is required.
 
 ## Local Development
 
@@ -38,7 +39,7 @@ Build the single-file offline edition:
 npm run build:standalone
 ```
 
-By default, the build script outputs the finished file to the parent directory of the project as `Turing_Machine_v1.2.0.html`.
+By default, the build script outputs the finished file to the parent directory of the project as `Turing_Machine_v1.2.1.html`.
 
 Verify the fixed challenge bank, randomly generated puzzles, and Turing Master challenge sets:
 
@@ -93,6 +94,7 @@ Accordingly, this project is more accurately described as **source-available / n
 ## 功能
 
 - 固定题库与本地随机生成题目
+- 验证器数量可选 **随机**（4–6 个），把同一难度下的所有题目整合在一起
 - 图灵大师每日挑战、自由练习与挑战战报
 - 历史记录覆盖已游玩的默认题库、随机题和大师挑战
 - 历史记录分为：入门、标准、困难、大师挑战
@@ -109,7 +111,7 @@ Accordingly, this project is more accurately described as **source-available / n
 
 ## 直接使用
 
-打开 `Turing_Machine_v1.2.0.html` 即可。该文件已经内嵌运行代码、样式、题库及规则资料，不需要联网，也不需要安装软件。
+打开 `Turing_Machine_v1.2.1.html` 即可。该文件已经内嵌运行代码、样式、题库及规则资料，不需要联网，也不需要安装软件。
 
 ## 本地开发
 
@@ -126,7 +128,7 @@ npm run dev
 npm run build:standalone
 ```
 
-构建脚本默认把成品输出到项目目录的上一级，文件名为 `Turing_Machine_v1.2.0.html`。
+构建脚本默认把成品输出到项目目录的上一级，文件名为 `Turing_Machine_v1.2.1.html`。
 
 核验固定题库、随机题和图灵大师题组：
 

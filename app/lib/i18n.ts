@@ -109,7 +109,7 @@ const englishUi: Record<string, string> = {
   '遗憾，挑战时间结束': 'The Challenge Time Has Ended', '正式挑战未在 60 分钟内完成': 'The official challenge was not completed within 60 minutes', '继续训练': 'Continue Training',
   '恭喜你成为图灵大师': 'Congratulations, You Are a Turing Master', '恭喜完成图灵大师训练': 'Turing Master Training Complete', '♛ 10 道挑战全部完成': '♛ All 10 challenge puzzles completed', '练习模式 · 10 道挑战全部完成': 'Practice mode · All 10 puzzles completed',
   '挑战入口': 'CHALLENGE SELECTOR', '420 题附件合集，以及无限离线随机题': '420 Printable Challenges and Unlimited Offline Puzzles', '输入打印题卡或朋友分享的随机题短代码即可载入；随机题会在本机即时生成，并通过唯一解校验。': 'Load a printed challenge or a random puzzle shared by a friend using its short code. Random puzzles are generated locally and checked for a unique solution.',
-  '题目短代码': 'Challenge Code', '载入题目': 'Load Puzzle', '验证器': 'Verifiers', '难度': 'Difficulty', '随机生成': 'Generate Random Puzzle', '附件题库': 'Printable Challenge Bank',
+  '题目短代码': 'Challenge Code', '载入题目': 'Load Puzzle', '验证器': 'Verifiers', '随机': 'Random', '难度': 'Difficulty', '随机生成': 'Generate Random Puzzle', '附件题库': 'Printable Challenge Bank',
   '16 页 · 共 420 题 · 可离线载入': '16 pages · 420 puzzles · Available offline', '选择挑战': 'Choose a challenge',
   '此网页版汉化仅供学习交流 严禁用于任何商业途径': 'This unofficial web adaptation is for study and personal exchange only. Commercial use is strictly prohibited.', 'Turing Machine 官网 ↗': 'Official Turing Machine Website ↗',
   '推理记录': 'Deduction Record', '数字排除': 'Number Elimination', '点击数字切换划线': 'Click a number to cross it out', '开始第一次询问': 'Ask Your First Question', '每次回答都会自动记录在这里，方便你排除数字并锁定验证标准。': 'Every answer is recorded here so you can eliminate numbers and identify each criterion.',
